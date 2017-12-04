@@ -3,16 +3,40 @@ function changeColor()
     alert("Click!");
 }
 
-function testownia()
+    
+function loadCoords(filename)
+{
+    $.get('img/'+filename+'.txt', function(data) {
+        var lines = data.split('\n');
+        var coords = lines[0].split(" ");
+        var tooth_id = coords[0]
+        var image_id = coords[1]
+        var dx = Number(coords[2]);
+        var dy = Number(coords[3]);
+        drawTooth(tooth_id, image_id, dx, dy);
+    }, 'text');
+}
+
+function drawTooth(tooth_id, image_id, x, y)
+{
+    var img_file = 
+        '<img id="t'+tooth_id+'" src="img/'+image_id+'.png">';
+    var content = document.getElementById("content");
+    content.innerHTML += img_file;
+    
+    // move img to correct position
+    document.getElementById('t'+tooth_id).style.left = x+"px";
+    document.getElementById('t'+tooth_id).style.top = y+"px";
+    
+    initToothAction(tooth_id);
+}
+
+function initToothAction(tooth_id)
 {
     var canvas = document.createElement("canvas");
-
     var ctx = canvas.getContext("2d");
-    
-    
-    document.getElementById("tooth").style.top = 364+"px";
-    document.getElementById("tooth").style.left = 63+"px";
-    $('#tooth').on("mousedown", function(event) {
+
+    $('#t'+tooth_id).on("mousedown", function(event) {
         // Get click coordinates
         var x = event.pageX - this.offsetLeft,
             y = event.pageY - this.offsetTop,
@@ -32,13 +56,20 @@ function testownia()
             $(document.elementFromPoint(event.clientX, event.clientY)).trigger("click");
             $(this).show();
         } else {
-            console.log("LOGO clicked!");
+            console.log(tooth_id);
         }
     });
     
-    $("#teeth-map").on("click", function(){
-        console.log("Green image clicked!");
-    });
+}
+
+function testownia()
+{
+    
+    loadCoords("18u");
+    
+//    $("#teeth-map").on("click", function(){
+//        console.log("Green image clicked!");
+//    });
 }
 
 window.onload = testownia
