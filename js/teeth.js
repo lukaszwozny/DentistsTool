@@ -1,6 +1,6 @@
-function Tooth(name, posX, posY, size){
+function Tooth(id, posX, posY, size){
 
-    this.name = name;
+    this.id = id;
     this.size = size;
     this.x = posX;
     this.y = posY;
@@ -10,13 +10,13 @@ function Tooth(name, posX, posY, size){
 Tooth.prototype.draw = function(){
     console.log("Howdy, my name is " + this.name);
     
-    this.img = '<img id="t'+this.name+'" class="tooth" src="img/'+this.size+'.png">';
+    this.img = '<img id="'+this.id+'" class="tooth" src="img/'+this.size+'.png">';
     var content = document.getElementById("content");
     content.innerHTML += this.img;
     
     // move img to correct position
-    document.getElementById('t'+this.name).style.left = this.x+"px";
-    document.getElementById('t'+this.name).style.top = this.y+"px";
+    document.getElementById(this.id).style.left = this.x+"px";
+    document.getElementById(this.id).style.top = this.y+"px";
 };
 
 
@@ -31,35 +31,21 @@ function loadCoords(filename)
         var lines = data.split('\n');
         for(i=0; i<lines.length; i++){
             var coords = lines[i].split(" ");
-            var tooth_id = coords[0]
-            var image_id = coords[1]
+            var tooth_id = Number(coords[0]);
+            var image_id = coords[1];
             var dx = Number(coords[2]);
             var dy = Number(coords[3]);
             
             var tooth = new Tooth(tooth_id, dx, dy, image_id);
-            teeth.push(tooth);
+            teeth[tooth_id] = tooth;
             
             tooth.draw();
         }
+        initTeethAction();
     }, 'text');
 }
 
-function drawTooth(tooth_id, image_id, x, y)
-{
-    var img_file = 
-        '<img id="t'+tooth_id+'" class="tooth" src="img/'+image_id+'.png">';
-    var content = document.getElementById("content");
-    content.innerHTML += img_file;
-    
-    // move img to correct position
-    document.getElementById('t'+tooth_id).style.left = x+"px";
-    document.getElementById('t'+tooth_id).style.top = y+"px";
-    
-    initToothAction(tooth_id);
-}
-
-
-function initToothAction(tooth_id)
+function initTeethAction()
 {
     $('.tooth').on("mousedown", function(event) {
         // Get click coordinates
@@ -74,15 +60,16 @@ function initToothAction(tooth_id)
         ctx.drawImage(this, 0, 0, w, h);
         alpha = ctx.getImageData(x, y, 1, 1).data[3]; // [0]R [1]G [2]B [3]A
 
-          // If pixel is transparent,
-          // retrieve the element underneath and trigger it's click event
+        // If pixel is transparent,
+        // retrieve the element underneath and trigger it's click event
         if( alpha===0 ) {
             $(this).hide();
             $(document.elementFromPoint(event.clientX, event.clientY)).trigger("click");
             $(this).show();
         } else {
-            console.log($(this).get(0).id);
-            console.log(teeth);
+            id = $(this).get(0).id;
+            console.log(id);
+            console.log(teeth[id].x);
         }
     });
 }
@@ -90,7 +77,7 @@ function initToothAction(tooth_id)
 function testownia()
 {
     
-    loadCoords("18u");
+    loadCoords("coords");
     
 //    $("#teeth-map").on("click", function(){
 //        console.log("Green image clicked!");
