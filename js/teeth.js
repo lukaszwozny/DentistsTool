@@ -19,12 +19,24 @@ function Tooth(id, posX, posY, size){
     this.img_d = "d";
     this.dx_d = 1;
     this.dy_d = 60;
+    
+    
+    this.id_l = this.id+"_l";
+    this.img_l = "l";
+    this.dx_l = 0;
+    this.dy_l = 0;
+    
+    
+    this.id_c = this.id+"_c";
+    this.img_c = "c";
+    this.dx_c = 30;
+    this.dy_c = 27;
 }
 
 Tooth.prototype.draw = function(){
-    // UP
-    this.img_u = '<img id="'+this.id_u+'" class="t_u" src="img/u'+this.size+'.png">';
     var content = document.getElementById("content");
+    // UP
+    this.img_u = '<img id="'+this.id_u+'" class="tooth_part" src="img/u'+this.size+'.png">';
     content.innerHTML += this.img_u;
     
     // move img to correct position
@@ -32,8 +44,7 @@ Tooth.prototype.draw = function(){
     document.getElementById(this.id_u).style.top = this.y+"px";
     
     // RIGHT
-    this.img_r = '<img id="'+this.id_r+'" class="t_u" src="img/r'+this.size+'.png">';
-    var content = document.getElementById("content");
+    this.img_r = '<img id="'+this.id_r+'" class="tooth_part" src="img/r'+this.size+'.png">';
     content.innerHTML += this.img_r;
     
     // move img to correct position
@@ -41,13 +52,28 @@ Tooth.prototype.draw = function(){
     document.getElementById(this.id_r).style.top = this.y+this.dy_r+"px";
     
     // DOWN
-    this.img_d = '<img id="'+this.id_d+'" class="t_u" src="img/d'+this.size+'.png">';
-    var content = document.getElementById("content");
+    this.img_d = '<img id="'+this.id_d+'" class="tooth_part" src="img/d'+this.size+'.png">';
     content.innerHTML += this.img_d;
     
     // move img to correct position
     document.getElementById(this.id_d).style.left = this.x+this.dx_d+"px";
     document.getElementById(this.id_d).style.top = this.y+this.dy_d+"px";
+    
+    // LEFT
+    this.img_l = '<img id="'+this.id_l+'" class="tooth_part" src="img/l'+this.size+'.png">';
+    content.innerHTML += this.img_l;
+    
+    // move img to correct position
+    document.getElementById(this.id_l).style.left = this.x+this.dx_l+"px";
+    document.getElementById(this.id_l).style.top = this.y+this.dy_l+"px";
+    
+    // CENTER
+    this.img_c = '<img id="'+this.id_c+'" class="tooth_part" src="img/c'+this.size+'.png">';
+    content.innerHTML += this.img_c;
+    
+    // move img to correct position
+    document.getElementById(this.id_c).style.left = this.x+this.dx_c+"px";
+    document.getElementById(this.id_c).style.top = this.y+this.dy_c+"px";
 };
 
 
@@ -78,7 +104,7 @@ function loadCoords(filename)
 
 function initTeethAction()
 {
-    $('.t_u').on("mousedown", function(event) {
+    $('.tooth_part').on("mousedown", function(event) {
         // Get click coordinates
         var x = event.pageX - this.offsetLeft,
             y = event.pageY - this.offsetTop,
