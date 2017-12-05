@@ -8,12 +8,14 @@ function loadCoords(filename)
 {
     $.get('img/'+filename+'.txt', function(data) {
         var lines = data.split('\n');
-        var coords = lines[0].split(" ");
-        var tooth_id = coords[0]
-        var image_id = coords[1]
-        var dx = Number(coords[2]);
-        var dy = Number(coords[3]);
-        drawTooth(tooth_id, image_id, dx, dy);
+        for(i=0; i<lines.length; i++){
+            var coords = lines[i].split(" ");
+            var tooth_id = coords[0]
+            var image_id = coords[1]
+            var dx = Number(coords[2]);
+            var dy = Number(coords[3]);
+            drawTooth(tooth_id, image_id, dx, dy);
+        }
     }, 'text');
 }
 
