@@ -6,6 +6,7 @@ RIGHT = [1,3,5,7];
 BOTTOM = [6,4,5,7];
 CENTER = [2,3,5,4];
 
+var TEETH = new Array();
 
 function buildCoords(w, h, w1, h1){
     coords = [
@@ -102,32 +103,29 @@ Tooth.prototype.add_actions = function(){
     this.center.click(changeColor)
 }
 
-function testownia()
+function createTooth(id, x, y, size, draw){
+    var tooth = new Tooth(id, x, y, size);
+    tooth.build_tooth(draw);
+    tooth.add_actions();
+    TEETH[id] = tooth;
+}
+
+function setup()
 {
+    // create coordinates for tooth sizes
     COORDS[1] = buildCoords(100,100,30,30);
-    COORDS[2] = buildCoords(80,100,40,30);
+    COORDS[2] = buildCoords(90,100,30,50);
     
+    // create draw window
     var width = 1100;
     var height = 400;
     var draw = SVG('drawing').size(width, height)
     
-    var t = new Tooth(1, 20, 40, 1);
-    t.build_tooth(draw);
-    t.add_actions();
+    // init teeth
+    createTooth(1, 20, 40, 1, draw);
+    createTooth(2, 140, 40, 2, draw);
     
-    var t2 = new Tooth(1, 140, 40, 2);
-    t2.build_tooth(draw);
-    t2.add_actions();
-    
-    
-//    buildPolygon(draw, COORDS_2[1], 'CENTER');
-    
-//    var text = draw.text('I know that eggs do well to stay out of frying pans.')
-//    text.move(20,20).font({ fill: '#f06', family: 'Inconsolata' })
-    
-//    polygon.click(function() {
-//        this.fill({ color: '#006' })
-//    })
+    console.log(TEETH);
 }
 
-window.onload = testownia
+window.onload = setup
