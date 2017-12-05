@@ -7,6 +7,16 @@ var RIGHT = [1,3,5,7];
 var BOTTOM = [6,4,5,7];
 var CENTER = [2,3,5,4];
 
+var color = 0;
+
+var COLORS = [
+    '#000', // black
+    '#f00', // red
+    '#0f0', // green
+    '#00f', // blue
+    '#FFF' // white
+]
+
 function buildCoords(coords){
     var w = coords[0];
     var h = coords[1];
@@ -80,9 +90,9 @@ Tooth.prototype.build_tooth = function(draw){
     
     // Text
     var text = draw.text(''+this.id);
-    var dx = text.bbox().width;
+    var dx = (this.top.bbox().width - text.bbox().width)/2;
     var dy = text.bbox().height;
-    text.move(this.x,this.y-dy).font({ fill: '#f06', family: 'Inconsolata' })
+    text.move(this.x+dx,this.y-dy).font({ fill: '#999', family: 'Inconsolata' })
 
     
     this.group = draw.group();
@@ -101,10 +111,9 @@ Tooth.prototype.build_tooth = function(draw){
 }
 
 function changeColor(){
-    this.fill({ color: color })
+    this.fill({ color: COLORS[color] })
 }
 
-var color = '#009';
 Tooth.prototype.add_actions = function(){
     this.top.click(changeColor)
     this.right.click(changeColor)
@@ -118,6 +127,76 @@ function createTooth(id, x, y, size, draw){
     tooth.build_tooth(draw);
     tooth.add_actions();
     TEETH[id] = tooth;
+}
+
+function create_toolbox(){
+    var width = 645;
+    var height = 200;
+    
+    draw = SVG('toolbox').size(width, height);
+    
+    var title = draw.text('Toolbox');
+    var dx = (width - title.bbox().width)/2;
+    title.font({ 
+        fill: '#999',
+        size: 18,
+        family: 'Inconsolata' 
+    }).move(dx,0);
+
+    var MARGIN = 5;
+    var y = title.bbox().height + MARGIN;
+    draw_tool(draw, 15, y, 1);
+}
+
+function draw_tool(draw, x, y, type)
+{
+    // BOX
+    var w = 70;
+    var h = 50
+    var rect = draw.rect(w, h);
+    rect.radius(10)
+    rect.attr({
+        fill: '#fff',
+        'fill-opacity': 0.5,
+        stroke: '#333',
+        'stroke-width': 3,
+    });
+    
+    // NAME
+    var name = draw.text('Próchnica');
+    name.font({ 
+        fill: '#333',
+        size: 14,
+        family: 'Inconsolata' 
+    });
+    var MARGIN = 3;
+    var dx = (w - name.bbox().width)/2;
+    var dy = h - name.bbox().height - MARGIN;
+    name.move(dx,dy);
+    
+    // COLOR
+    var col_w = w-MARGIN*2;
+    var col_h = h - name.bbox().height - 3*MARGIN;
+    var col_rect = draw.rect(col_w, col_h);
+    col_rect.radius(10)
+    col_rect.attr({
+        fill: '#f00',
+        stroke: '#333',
+        'stroke-width': 2,
+    });
+    dx = (w - col_rect.bbox().width)/2;
+    col_rect.move(dx,MARGIN);
+    
+    var group = draw.group();
+    group.add(rect);
+    group.add(name);
+    group.add(col_rect);
+    group.move(x,y);
+    
+    group.click(function(){
+        color = 1;
+        this.animate().scale(0.8);
+    })
 }
 
 function setup()
@@ -134,14 +213,15 @@ function setup()
     // create draw window
     var width = 1100;
     var height = 400;
-    var draw = SVG('teeth-big').size(width, height)
+    var draw = SVG('teeth-big').size(width, height);
     
     // init teeth
     createTooth(18, 20, 40, 1, draw);
     createTooth(17, 130, 40, 1, draw);
     createTooth(16, 240, 40, 1, draw);
     
-    console.log(TEETH);
+    // toolbox init
+    create_toolbox();
 }
 
 window.onload = setup
