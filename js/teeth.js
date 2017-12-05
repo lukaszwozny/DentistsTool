@@ -1,7 +1,26 @@
-function changeColor()
-{
-    alert("Click!");
+function Tooth(name, posX, posY, size){
+
+    this.name = name;
+    this.size = size;
+    this.x = posX;
+    this.y = posY;
+    this.img = "aaaa";
 }
+
+Tooth.prototype.draw = function(){
+    console.log("Howdy, my name is " + this.name);
+    
+    this.img = '<img id="t'+this.name+'" class="tooth" src="img/'+this.size+'.png">';
+    var content = document.getElementById("content");
+    content.innerHTML += this.img;
+    
+    // move img to correct position
+    document.getElementById('t'+this.name).style.left = this.x+"px";
+    document.getElementById('t'+this.name).style.top = this.y+"px";
+};
+
+
+var teeth = new Array();
 
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
@@ -16,7 +35,11 @@ function loadCoords(filename)
             var image_id = coords[1]
             var dx = Number(coords[2]);
             var dy = Number(coords[3]);
-            drawTooth(tooth_id, image_id, dx, dy);
+            
+            var tooth = new Tooth(tooth_id, dx, dy, image_id);
+            teeth.push(tooth);
+            
+            tooth.draw();
         }
     }, 'text');
 }
@@ -59,6 +82,7 @@ function initToothAction(tooth_id)
             $(this).show();
         } else {
             console.log($(this).get(0).id);
+            console.log(teeth);
         }
     });
 }
