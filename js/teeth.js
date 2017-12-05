@@ -3,6 +3,8 @@ function changeColor()
     alert("Click!");
 }
 
+var canvas = document.createElement("canvas");
+var ctx = canvas.getContext("2d");
     
 function loadCoords(filename)
 {
@@ -22,7 +24,7 @@ function loadCoords(filename)
 function drawTooth(tooth_id, image_id, x, y)
 {
     var img_file = 
-        '<img id="t'+tooth_id+'" src="img/'+image_id+'.png">';
+        '<img id="t'+tooth_id+'" class="tooth" src="img/'+image_id+'.png">';
     var content = document.getElementById("content");
     content.innerHTML += img_file;
     
@@ -33,12 +35,10 @@ function drawTooth(tooth_id, image_id, x, y)
     initToothAction(tooth_id);
 }
 
+
 function initToothAction(tooth_id)
 {
-    var canvas = document.createElement("canvas");
-    var ctx = canvas.getContext("2d");
-
-    $('#t'+tooth_id).on("mousedown", function(event) {
+    $('.tooth').on("mousedown", function(event) {
         // Get click coordinates
         var x = event.pageX - this.offsetLeft,
             y = event.pageY - this.offsetTop,
@@ -58,10 +58,9 @@ function initToothAction(tooth_id)
             $(document.elementFromPoint(event.clientX, event.clientY)).trigger("click");
             $(this).show();
         } else {
-            console.log(tooth_id);
+            console.log($(this).get(0).id);
         }
     });
-    
 }
 
 function testownia()
