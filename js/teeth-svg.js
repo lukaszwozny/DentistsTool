@@ -21,7 +21,8 @@ var TOOLS = [
     ['None', '#FFF'],
     ['Próchnica', '#000'],
     ['Wypełnienie', '#0f0'],
-    ['Korona', '#00f']
+    ['Korona', '#00f'],
+    ['Do usun.', '#f00']
 ];
 var TOOLS_GROUPS = [];
 
@@ -99,8 +100,11 @@ Tooth.prototype.build_tooth = function(draw){
     // Text
     var text = draw.text(''+this.id);
     var dx = (this.top.bbox().width - text.bbox().width)/2;
-    var dy = text.bbox().height;
-    text.move(this.x+dx,this.y-dy).font({ fill: '#999', family: 'Inconsolata' })
+    var dy = -text.bbox().height;
+    if(this.id >30 && this.id<50){
+        dy = this.left.bbox().height;
+    }
+    text.move(this.x+dx,this.y+dy).font({ fill: '#999', family: 'Inconsolata' })
 
     
     this.group = draw.group();
@@ -156,13 +160,13 @@ function create_toolbox(){
     draw_tool(draw, 15, y, 1);
     draw_tool(draw, 95, y, 2);
     draw_tool(draw, 175, y, 3);
+    draw_tool(draw, 255, y, 4);
 }
 
 function draw_tool(draw, x, y, type)
 {
     var text = TOOLS[type][0];
     var color = TOOLS[type][1];
-    console.log(text);
     
     // BOX
     var w = 70;
@@ -233,14 +237,59 @@ function setup()
     COORDS[3] = buildCoords(coords[3]);
     
     // create draw window
-    var width = 1100;
+    var width = 1400;
     var height = 400;
     var draw = SVG('teeth-big').size(width, height);
     
     // init teeth
-    createTooth(18, 20, 40, 1, draw);
-    createTooth(17, 130, 40, 1, draw);
-    createTooth(16, 240, 40, 1, draw);
+    var MARGIN = 10;
+    var dx = MARGIN;
+    var dx1 = coords[1][0] + MARGIN;
+    var dx2 = coords[2][0] + MARGIN;
+    var dx3 = coords[3][0] + MARGIN;
+    var dy = 40;
+    
+    // top left
+    createTooth(18, dx, dy, 1, draw); dx+=dx1;
+    createTooth(17, dx, dy, 1, draw); dx+=dx1;
+    createTooth(16, dx, dy, 1, draw); dx+=dx1;
+    createTooth(15, dx, dy, 2, draw); dx+=dx2;
+    createTooth(14, dx, dy, 2, draw); dx+=dx2;
+    createTooth(13, dx, dy, 3, draw); dx+=dx3;
+    createTooth(12, dx, dy, 3, draw); dx+=dx3;
+    createTooth(11, dx, dy, 3, draw); dx+=dx3;
+    // top right
+    createTooth(21, dx, dy, 3, draw); dx+=dx3;
+    createTooth(22, dx, dy, 3, draw); dx+=dx3;
+    createTooth(23, dx, dy, 3, draw); dx+=dx3;
+    createTooth(24, dx, dy, 2, draw); dx+=dx2;
+    createTooth(25, dx, dy, 2, draw); dx+=dx2;
+    createTooth(26, dx, dy, 1, draw); dx+=dx1;
+    createTooth(27, dx, dy, 1, draw); dx+=dx1;
+    createTooth(28, dx, dy, 1, draw); dx+=dx1;
+    
+    // next line
+    dx = MARGIN;
+    dy += coords[1][1] + 3*MARGIN;
+    // bottom left
+    createTooth(48, dx, dy, 1, draw); dx+=dx1;
+    createTooth(47, dx, dy, 1, draw); dx+=dx1;
+    createTooth(46, dx, dy, 1, draw); dx+=dx1;
+    createTooth(45, dx, dy, 2, draw); dx+=dx2;
+    createTooth(44, dx, dy, 2, draw); dx+=dx2;
+    createTooth(43, dx, dy, 3, draw); dx+=dx3;
+    createTooth(42, dx, dy, 3, draw); dx+=dx3;
+    createTooth(41, dx, dy, 3, draw); dx+=dx3;
+    
+    // bottom right
+    createTooth(31, dx, dy, 3, draw); dx+=dx3;
+    createTooth(32, dx, dy, 3, draw); dx+=dx3;
+    createTooth(33, dx, dy, 3, draw); dx+=dx3;
+    createTooth(34, dx, dy, 2, draw); dx+=dx2;
+    createTooth(35, dx, dy, 2, draw); dx+=dx2;
+    createTooth(36, dx, dy, 1, draw); dx+=dx1;
+    createTooth(37, dx, dy, 1, draw); dx+=dx1;
+    createTooth(38, dx, dy, 1, draw); dx+=dx1;
     
     // toolbox init
     create_toolbox();
