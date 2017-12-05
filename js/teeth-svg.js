@@ -7,7 +7,6 @@ var RIGHT = [1,3,5,7];
 var BOTTOM = [6,4,5,7];
 var CENTER = [2,3,5,4];
 
-var color = 0;
 
 var COLORS = [
     '#000', // black
@@ -15,7 +14,16 @@ var COLORS = [
     '#0f0', // green
     '#00f', // blue
     '#FFF' // white
-]
+];
+
+var TOOL_ID = 0;
+var TOOLS = [
+    ['None', '#FFF'],
+    ['Próchnica', '#000'],
+    ['Wypełnienie', '#0f0'],
+    ['Korona', '#00f']
+];
+var TOOLS_GROUPS = [];
 
 function buildCoords(coords){
     var w = coords[0];
@@ -111,7 +119,7 @@ Tooth.prototype.build_tooth = function(draw){
 }
 
 function changeColor(){
-    this.fill({ color: COLORS[color] })
+    this.fill({ color: TOOLS[TOOL_ID][1] })
 }
 
 Tooth.prototype.add_actions = function(){
@@ -146,10 +154,16 @@ function create_toolbox(){
     var MARGIN = 5;
     var y = title.bbox().height + MARGIN;
     draw_tool(draw, 15, y, 1);
+    draw_tool(draw, 95, y, 2);
+    draw_tool(draw, 175, y, 3);
 }
 
 function draw_tool(draw, x, y, type)
 {
+    var text = TOOLS[type][0];
+    var color = TOOLS[type][1];
+    console.log(text);
+    
     // BOX
     var w = 70;
     var h = 50
@@ -163,7 +177,7 @@ function draw_tool(draw, x, y, type)
     });
     
     // NAME
-    var name = draw.text('Próchnica');
+    var name = draw.text(text);
     name.font({ 
         fill: '#333',
         size: 14,
@@ -180,7 +194,7 @@ function draw_tool(draw, x, y, type)
     var col_rect = draw.rect(col_w, col_h);
     col_rect.radius(10)
     col_rect.attr({
-        fill: '#f00',
+        fill: color,
         stroke: '#333',
         'stroke-width': 2,
     });
@@ -194,9 +208,17 @@ function draw_tool(draw, x, y, type)
     group.move(x,y);
     
     group.click(function(){
-        color = 1;
-        this.animate().scale(0.8);
+        if (type != TOOL_ID){ // select
+            if(TOOL_ID != 0) TOOLS_GROUPS[TOOL_ID].animate().scale(1.0);
+            TOOL_ID = type;
+            this.animate().scale(0.8);
+        } else { // unselect
+            this.animate().scale(1.0);
+            TOOL_ID = 0;
+        }
     })
+    
+    TOOLS_GROUPS[type] = group;
 }
 
 function setup()
