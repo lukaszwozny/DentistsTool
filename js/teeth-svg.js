@@ -1,14 +1,17 @@
 var COORDS = new Array();
-
-TOP = [0,1,3,2];
-LEFT = [0,2,4,6];
-RIGHT = [1,3,5,7];
-BOTTOM = [6,4,5,7];
-CENTER = [2,3,5,4];
-
 var TEETH = new Array();
 
-function buildCoords(w, h, w1, h1){
+var TOP = [0,1,3,2];
+var LEFT = [0,2,4,6];
+var RIGHT = [1,3,5,7];
+var BOTTOM = [6,4,5,7];
+var CENTER = [2,3,5,4];
+
+function buildCoords(coords){
+    var w = coords[0];
+    var h = coords[1];
+    var w1 = coords[2];
+    var h1 = coords[3];
     coords = [
         [0,0], [w,0],
         [w1, h1], [w-w1,h1],
@@ -75,6 +78,13 @@ Tooth.prototype.build_tooth = function(draw){
     this.left = buildPolygon(draw, COORDS[this.size], "LEFT");
     this.center = buildPolygon(draw, COORDS[this.size], "CENTER");
     
+    // Text
+    var text = draw.text(''+this.id);
+    var dx = text.bbox().width;
+    var dy = text.bbox().height;
+    text.move(this.x,this.y-dy).font({ fill: '#f06', family: 'Inconsolata' })
+
+    
     this.group = draw.group();
     this.group.add(this.top);
     this.group.add(this.right);
@@ -113,17 +123,23 @@ function createTooth(id, x, y, size, draw){
 function setup()
 {
     // create coordinates for tooth sizes
-    COORDS[1] = buildCoords(100,100,30,30);
-    COORDS[2] = buildCoords(90,100,30,50);
+    var coords = new Array();
+    coords[1] = [100, 90, 30, 30];
+    coords[2] = [60, 90, 20, 30];
+    coords[3] = [60, 90, 20, 45];
+    COORDS[1] = buildCoords(coords[1]);
+    COORDS[2] = buildCoords(coords[2]);
+    COORDS[3] = buildCoords(coords[3]);
     
     // create draw window
     var width = 1100;
     var height = 400;
-    var draw = SVG('drawing').size(width, height)
+    var draw = SVG('teeth-big').size(width, height)
     
     // init teeth
-    createTooth(1, 20, 40, 1, draw);
-    createTooth(2, 140, 40, 2, draw);
+    createTooth(18, 20, 40, 1, draw);
+    createTooth(17, 130, 40, 1, draw);
+    createTooth(16, 240, 40, 1, draw);
     
     console.log(TEETH);
 }

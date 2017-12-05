@@ -6,7 +6,7 @@ body
 
 header
 {
-    width: 1100px;
+    width: 1400px;
     min-height: 50px;
     margin-left: auto;
     margin-right: auto;
@@ -30,18 +30,65 @@ article
     font-size: 28px;
 }
 
-#head_info
+#head-info
 {
-    width: 1100px;
+    width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-#drawing
+#teeth-big
 {
-    width: 1100px;
-    min-height: 400px;
-    border: 3px solid #cc0000;
+    width: 1400px;
+    min-height: 280px;
+    background-color: #333333;
+    border-radius: 10px;
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+#bottom-content {
+    width: 1400px;
+    min-height: 500px;
+/*    background-color: #333333;*/
+/*    border-radius: 10px;*/
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-/*img{position:absolute;top:0; left:0;}*/
-/*img + img{position:absolute;top:0; left:0;}*/
+#left-content {
+    width: 740px;
+    min-height: 490px;
+    float: left;
+    background-color: #333333;
+    border-radius: 10px;
+}
+
+#right-content {
+    width: 655px;
+    height: 490px;
+    margin-left: 5px;
+    float: left;
+    background-color: #333333;
+    border-radius: 10px;
+}
+
+#teeth-small
+{
+    width: 730px;
+    min-height: 280px;
+    margin: 5px;
+    background-color: #444444;
+    border-radius: 10px;
+}
+
+#toolbox {
+    width: 645px;
+    height: 200px;
+    margin: 5px;
+    background-color: #444444;
+    border-radius: 10px;
+    
+}
