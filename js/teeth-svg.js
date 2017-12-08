@@ -9,20 +9,20 @@ var CENTER = [2,3,5,4];
 
 
 var COLORS = [
-    '#000', // black
-    '#f00', // red
-    '#0f0', // green
-    '#00f', // blue
-    '#FFF' // white
+    '#000000', // black
+    '#ff0000', // red
+    '#00ff00', // green
+    '#0000ff', // blue
+    '#ffffff' // white
 ];
 
 var TOOL_ID = 0;
 var TOOLS = [
-    ['None', '#FFF'],
-    ['Próchnica', '#000'],
-    ['Wypełnienie', '#0f0'],
-    ['Korona', '#00f'],
-    ['Do usun.', '#f00']
+    ['None', '#ffffff'],
+    ['Próchnica', '#000000'],
+    ['Wypełnienie', '#00ff00'],
+    ['Korona', '#0000ff'],
+    ['Do usun.', '#ff0000']
 ];
 var TOOLS_GROUPS = [];
 
@@ -123,7 +123,10 @@ Tooth.prototype.build_tooth = function(draw){
 }
 
 function changeColor(){
-    this.fill({ color: TOOLS[TOOL_ID][1] })
+    var c = TOOLS[TOOL_ID][1];
+    var old_c = this.attr('fill');
+    if(old_c == c) this.fill({ color: TOOLS[0][1] });
+    else this.fill({ color: TOOLS[TOOL_ID][1] });
 }
 
 Tooth.prototype.add_actions = function(){
