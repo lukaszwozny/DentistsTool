@@ -7,6 +7,10 @@ var RIGHT = [1,3,5,7];
 var BOTTOM = [6,4,5,7];
 var CENTER = [2,3,5,4];
 
+var CROSS_BOX = [0, 1, 7, 6];
+var LINE_LR = [0, 7];
+var LINE_RL = [1, 6];
+
 
 var COLORS = [
     '#000000', // black
@@ -75,72 +79,19 @@ function buildPolygon(draw, tab, side)
     return polygon;
 }
 
-function Tooth(id, posX, posY, size){
-    this.id = id;
-    this.size = size;
-    this.x = posX;
-    this.y = posY;
-    
-    this.top = "";
-    this.right = "";
-    this.bottom = "";
-    this.left = "";
-    this.center = "";
-    
-    this.group = "";
-}
-
-Tooth.prototype.build_tooth = function(draw){
-    this.top = buildPolygon(draw, COORDS[this.size], "TOP");
-    this.right = buildPolygon(draw, COORDS[this.size], "RIGHT");
-    this.bottom = buildPolygon(draw, COORDS[this.size], "BOTTOM");
-    this.left = buildPolygon(draw, COORDS[this.size], "LEFT");
-    this.center = buildPolygon(draw, COORDS[this.size], "CENTER");
-    
-    // Text
-    var text = draw.text(''+this.id);
-    var dx = (this.top.bbox().width - text.bbox().width)/2;
-    var dy = -text.bbox().height;
-    if(this.id >30 && this.id<50){
-        dy = this.left.bbox().height;
-    }
-    text.move(this.x+dx,this.y+dy).font({ fill: '#999', family: 'Inconsolata' })
-
-    
-    this.group = draw.group();
-    this.group.add(this.top);
-    this.group.add(this.right);
-    this.group.add(this.bottom);
-    this.group.add(this.left);
-    this.group.add(this.center);
-    this.group.move(this.x, this.y);
-    this.group.attr({
-        fill: '#fff',
-        'fill-opacity': 0.5,
-        stroke: '#000',
-        'stroke-width': 1
-    })
-}
-
 function changeColor(){
-    var c = TOOLS[TOOL_ID][1];
-    var old_c = this.attr('fill');
-    if(old_c == c) this.fill({ color: TOOLS[0][1] });
-    else this.fill({ color: TOOLS[TOOL_ID][1] });
-}
-
-Tooth.prototype.add_actions = function(){
-    this.top.click(changeColor)
-    this.right.click(changeColor)
-    this.bottom.click(changeColor)
-    this.left.click(changeColor)
-    this.center.click(changeColor)
+    if (TOOL_ID != 4){
+        var c = TOOLS[TOOL_ID][1];
+        var old_c = this.attr('fill');
+        if(old_c == c) this.fill({ color: TOOLS[0][1] });
+        else this.fill({ color: TOOLS[TOOL_ID][1] });
+    }
 }
 
 function createTooth(id, x, y, size, draw){
     var tooth = new Tooth(id, x, y, size);
-    tooth.build_tooth(draw);
-    tooth.add_actions();
+    tooth.build_tooth(draw, COORDS);
+    tooth.add_parts_actions(changeColor);
     TEETH[id] = tooth;
 }
 
