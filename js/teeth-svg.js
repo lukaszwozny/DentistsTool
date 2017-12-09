@@ -26,7 +26,8 @@ var TOOLS = [
     ['Próchnica', '#000000'],
     ['Wypełnienie', '#00ff00'],
     ['Korona', '#0000ff'],
-    ['Do usun.', '#ff0000']
+    ['Do usun.', '#ff0000'], // 4 - remove tooth
+    ['Mleczny.', '#ffffff'] // 5 - mleczak
 ];
 var TOOLS_GROUPS = [];
 
@@ -76,11 +77,12 @@ function buildPolygon(draw, tab, side)
     }
     var coords = coords2Str(tab, points);
     var polygon = draw.polygon(coords);
+    polygon.fill('#fff');
     return polygon;
 }
 
 function changeColor(){
-    if (TOOL_ID != 4){
+    if (TOOL_ID != 4 && TOOL_ID != 5){
         var c = TOOLS[TOOL_ID][1];
         var old_c = this.attr('fill');
         if(old_c == c) this.fill({ color: TOOLS[0][1] });
@@ -111,10 +113,11 @@ function create_toolbox(){
 
     var MARGIN = 5;
     var y = title.bbox().height + MARGIN;
-    draw_tool(draw, 15, y, 1);
-    draw_tool(draw, 95, y, 2);
-    draw_tool(draw, 175, y, 3);
-    draw_tool(draw, 255, y, 4);
+    var X = 15;
+    var OFFSET = 80;
+    for(i=1; i<=5; i++){
+        draw_tool(draw, X+(i-1)*OFFSET, y, i);
+    }
 }
 
 function draw_tool(draw, x, y, type)
